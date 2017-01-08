@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#2196F3</color>
+
+    <!-- -->
+    <color name="listItemsBg">#e8eaf6</color>
+    <color name="markBg">#418BCA</color>
+    <color name="buttonsBg">#2196F3</color>
+    <color name="grayText">#A9A9A9</color>
+</resources>

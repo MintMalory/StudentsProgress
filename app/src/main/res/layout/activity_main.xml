@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_switcher"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ua.mintmalory.studentsprogress.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/activity_main_downloading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/progressBar"
+            android:layout_centerHorizontal="true"
+            android:text="@string/loading_str"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/activity_main_normal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/activity_vertical_margin">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/students_list_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.wunderlist.slidinglayer.SlidingLayer
+            android:id="@+id/slidingLayer1"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            app:stickTo="right">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:text="@string/filters_text"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/big_text_size"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/courses_list_sp"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:textSize="@dimen/big_text_size" />
+
+                <EditText
+                    android:id="@+id/filter_mark_tv"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:digits="0123456789"
+                    android:hint="@string/mark_hint"
+                    android:imeOptions="actionDone"
+                    android:inputType="phone|numberDecimal"
+                    android:textColorHint="@color/grayText"
+                    android:textSize="@dimen/big_text_size" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|end"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginTop="30dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/clear_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginRight="30dp"
+                        android:background="@color/buttonsBg"
+                        android:text="@string/clear_btn_text"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/big_text_size" />
+
+                    <Button
+                        android:id="@+id/ok_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/buttonsBg"
+                        android:text="@string/btn_ok_text"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/big_text_size" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.wunderlist.slidinglayer.SlidingLayer>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_main_no_internet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:srcCompat="@drawable/ic_no_internet" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/no_internet_screen_msg"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</ViewFlipper>

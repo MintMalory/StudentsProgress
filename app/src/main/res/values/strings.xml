@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Students progress</string>
+    <string name="courses_dialog_title">Courses</string>
+    <string name="btn_ok_text">OK</string>
+    <string name="average_mark">Average mark: %.2f</string>
+    <string name="loading_str">Data downloading...</string>
+    <string name="no_internet_screen_msg">No Internet connection.</string>
+    <string name="clear_btn_text">clear</string>
+    <string name="ok_btn_text">ok</string>
+    <string name="mark_hint">Mark</string>
+    <string name="filters_text">Filters</string>
+    <string name="no_mark_err_msg">You have to specify the mark for filtering.</string>
+    <string name="no_data_for_filtering_err_msg">Sorry, no data for filtering.</string>
+    <string name="author_name">Lugysha L.</string>
+    <string name="author_name_plus_offline">Lugysha L. (offline mode)</string>
+    <string name="no_data_found_msg">No data found.</string>
+</resources>
