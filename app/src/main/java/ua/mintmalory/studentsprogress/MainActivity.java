@@ -36,6 +36,7 @@ import ua.mintmalory.studentsprogress.models.Student;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int TIME_TO_DOWNLOAD_ZONE = 6;
     private RecyclerView studentsListRv;
     private List<Student> studentsList = new ArrayList<>();
     private StudentsListAdapter adapter;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DataSource dataSource;
 
-    private boolean isDownloading = false;
+    private volatile boolean isDownloading = false;
     private boolean isMenuAvailable = true;
 
     @Override
@@ -108,16 +109,17 @@ public class MainActivity extends AppCompatActivity {
                 super.onScrolled(recyclerView, dx, dy);
                 int pastVisibleItems = layoutManager.findLastVisibleItemPosition();
 
-                if (pastVisibleItems >= adapter.getItemCount() - 6 && !isDownloading) {
+                if (pastVisibleItems > 0 && pastVisibleItems >= adapter.getItemCount() - TIME_TO_DOWNLOAD_ZONE && !isDownloading) {
                     isDownloading = true;
 
                     if (isListFiltered) {
-                        studentsList.addAll(dataSource.getFilteredStudentsPage(adapter.getItemCount() / DatabaseHelper.PAGE_SIZE + 1, filterCourseName, filterMark));
+                        SelectingFilteredStudentsNextPage task = new SelectingFilteredStudentsNextPage();
+                        task.execute(adapter.getItemCount() / DatabaseHelper.PAGE_SIZE + 1);
                     } else {
-                        studentsList.addAll(dataSource.getStudentsPage(adapter.getItemCount() / DatabaseHelper.PAGE_SIZE + 1));
+                        SelectingStudentsNextPage task = new SelectingStudentsNextPage();
+                        task.execute(adapter.getItemCount() / DatabaseHelper.PAGE_SIZE + 1);
                     }
-                    adapter.notifyDataSetChanged();
-                    isDownloading = false;
+
                 }
             }
         });
@@ -173,12 +175,8 @@ public class MainActivity extends AppCompatActivity {
                 filterMark = markTv.getText().toString();
 
                 studentsList.clear();
-                studentsList.addAll(dataSource.getFilteredStudentsPage(1, filterCourseName, filterMark));
-                adapter.notifyDataSetChanged();
-
-                if(adapter.getItemCount() == 0){
-                    Toast.makeText(MainActivity.this, getString(R.string.no_data_found_msg), Toast.LENGTH_LONG).show();
-                }
+                SelectingFilteredStudentsNextPage task = new SelectingFilteredStudentsNextPage();
+                task.execute(1);
 
                 slidingLayer.closeLayer(true);
             }
@@ -277,6 +275,45 @@ public class MainActivity extends AppCompatActivity {
             populateSpinner();
             populateRecyclerView();
             flipToLayout(R.id.activity_main_normal);
+        }
+    }
+
+    class SelectingStudentsNextPage extends AsyncTask<Integer, Void, List<Student>> {
+
+        @Override
+        protected List<Student> doInBackground(Integer... integers) {
+            List<Student> nextPage = dataSource.getStudentsPage(integers[0]);
+            return nextPage;
+        }
+
+        @Override
+        protected void onPostExecute(List<Student> students) {
+            super.onPostExecute(students);
+
+            studentsList.addAll(students);
+            adapter.notifyDataSetChanged();
+            isDownloading = false;
+        }
+    }
+
+    class SelectingFilteredStudentsNextPage extends AsyncTask<Integer, Void, List<Student>> {
+        @Override
+        protected List<Student> doInBackground(Integer... integers) {
+            List<Student> nextPage = dataSource.getFilteredStudentsPage(integers[0], filterCourseName, filterMark);
+            return nextPage;
+        }
+
+        @Override
+        protected void onPostExecute(List<Student> students) {
+            super.onPostExecute(students);
+
+            studentsList.addAll(students);
+            adapter.notifyDataSetChanged();
+            isDownloading = false;
+
+            if (adapter.getItemCount() == 0) {
+                Toast.makeText(MainActivity.this, getString(R.string.no_data_found_msg), Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

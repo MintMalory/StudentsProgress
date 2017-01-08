@@ -23,18 +23,20 @@ import static ua.mintmalory.studentsprogress.db.DatabaseHelper.KEY_MARK;
  */
 
 public class DataSource {
-    private Context context;
     private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
 
     public DataSource(Context context) {
-        this.context = context;
         dbHelper = new DatabaseHelper(context);
         db = dbHelper.getWritableDatabase();
     }
 
-    public void open() {
+    public void openForWriting() {
         db = dbHelper.getWritableDatabase();
+    }
+
+    public void openForReading() {
+        db = dbHelper.getReadableDatabase();
     }
 
     public void close() {
@@ -44,7 +46,7 @@ public class DataSource {
     }
 
     public void createStudentsWithMarks(List<Student> students) {
-        open();
+        openForWriting();
         db.beginTransaction();
         for (Student student : students) {
             createStudentWithMarks(student);
@@ -73,7 +75,7 @@ public class DataSource {
     }
 
     public List<Student> getStudentsPage(int pageNumber) {
-        open();
+        openForReading();
         Cursor c = dbHelper.getStudentsPage(pageNumber, db);
 
         List<Student> studentsPage = studentsCursorToList(c);
@@ -82,7 +84,7 @@ public class DataSource {
     }
 
     public List<Student> getFilteredStudentsPage(int pageNumber, String courseName, String mark) {
-        open();
+        openForReading();
         Cursor c = dbHelper.getFilteredStudentsPage(pageNumber, courseName, mark, db);
 
         List<Student> studentsPage = studentsCursorToList(c);
@@ -123,7 +125,7 @@ public class DataSource {
     }
 
     public String[] getArrayOfCourses() {
-        open();
+        openForReading();
         Cursor c = dbHelper.getAllCourses(db);
 
         String[] courses = new String[c.getCount()];
